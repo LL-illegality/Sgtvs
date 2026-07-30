@@ -39,6 +39,12 @@
   75% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
 }
 
+@keyframes jump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
 /* ------------ Animation utility classes ------------ */
 .animate-leaf { animation: floatLeaf 7s ease-in-out infinite; }
 .animate-leaf-1 { animation: floatLeaf 6s ease-in-out infinite; animation-delay: -1s; }
@@ -418,6 +424,9 @@ body {
 }
 .contact-card:active {
   transform: scale(0.97);
+}
+.contact-card-jump {
+  animation: jump 0.5s ease-in-out;
 }
 .contact-card--empty {
   opacity: 0.5;

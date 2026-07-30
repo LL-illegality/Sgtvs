@@ -478,6 +478,25 @@
     fetchTimeline();
     fetchSettings();
 
+    var joinCta = document.querySelector('.join-cta');
+    if (joinCta) {
+      joinCta.addEventListener('click', function (e) {
+        e.preventDefault();
+        var cards = document.querySelectorAll('#contact-cards .contact-card');
+        for (var i = 0; i < cards.length; i++) {
+          (function (card, delay) {
+            setTimeout(function () {
+              card.classList.add('contact-card-jump');
+              card.addEventListener('animationend', function handler() {
+                card.classList.remove('contact-card-jump');
+                card.removeEventListener('animationend', handler);
+              });
+            }, delay);
+          })(cards[i], i * 180);
+        }
+      });
+    }
+
     var ticking = false;
     window.addEventListener('scroll', function () {
       if (!ticking) {
