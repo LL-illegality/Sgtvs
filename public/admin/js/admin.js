@@ -375,7 +375,7 @@
   }
 
   function deleteMember(id) {
-    if (!confirm('确定要删除该成员吗？')) return;
+    if (!confirm('确定要删除该卡片吗？')) return;
 
     // Find the item element and play leave animation
     var itemEl = membersList.querySelector('.data-item[data-id="' + id + '"]');
@@ -574,7 +574,7 @@
   }
 
   function deleteTimeline(id) {
-    if (!confirm('确定要删除该事件吗？')) return;
+    if (!confirm('确定要删除该活动吗？')) return;
 
     // Find the item element and play leave animation
     var itemEl = timelineList.querySelector('.data-item[data-id="' + id + '"]');
@@ -634,7 +634,7 @@
       { key: 'wechat', label: '现任台长微信', placeholder: '微信号' },
       { key: 'officialAccount', label: '公众号 ID', placeholder: '公众号 ID' },
       { key: 'videoChannel', label: '视频号昵称', placeholder: '视频号昵称' },
-      { key: 'bilibili', label: 'B 站账号', placeholder: 'B 站 UID 或空间链接' }
+      { key: 'bilibili', label: 'B 站账号 UID ', placeholder: 'B 站 UID' }
     ];
     var html = '';
     for (var i = 0; i < fields.length; i++) {
@@ -676,10 +676,10 @@
     editingType = 'members';
     if (member) {
       editingId = member.id;
-      modalTitle.textContent = '编辑成员';
+      modalTitle.textContent = '编辑卡片';
     } else {
       editingId = null;
-      modalTitle.textContent = '新增成员';
+      modalTitle.textContent = '新增卡片';
     }
 
     var showDesc = member ? member.showDescription : true;
@@ -798,10 +798,10 @@
     editingType = 'timeline';
     if (event) {
       editingId = event.id;
-      modalTitle.textContent = '编辑事件';
+      modalTitle.textContent = '编辑活动';
     } else {
       editingId = null;
-      modalTitle.textContent = '新增事件';
+      modalTitle.textContent = '新增活动';
     }
 
     formFields.innerHTML =
@@ -814,11 +814,11 @@
         '<input class="form-input" id="field-title" type="text" value="' + escapeHtml(event ? event.title : '') + '" required>' +
       '</div>' +
       '<div class="form-group">' +
-        '<label class="form-label" for="field-shortDesc">简短描述</label>' +
+        '<label class="form-label" for="field-shortDesc">简短描述（于图文卡片）</label>' +
         '<textarea class="form-textarea" id="field-shortDesc">' + escapeHtml(event ? event.shortDesc : '') + '</textarea>' +
       '</div>' +
       '<div class="form-group">' +
-        '<label class="form-label" for="field-detailDesc">详细描述</label>' +
+        '<label class="form-label" for="field-detailDesc">详细描述（纯文本卡片）</label>' +
         '<textarea class="form-textarea" id="field-detailDesc">' + escapeHtml(event ? event.detailDesc : '') + '</textarea>' +
       '</div>' +
       '<div class="form-group">' +

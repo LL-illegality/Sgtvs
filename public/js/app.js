@@ -15,7 +15,7 @@
       console.error('Error loading members:', err);
       if (membersGrid) {
         membersGrid.innerHTML =
-          '<p class="text-stone-500 col-span-full text-center py-8">成员数据暂未加载成功，请稍后刷新页面。</p>';
+          '<p class="text-stone-500 col-span-full text-center py-8">“关于我们”数据暂未加载成功，请稍后刷新页面。</p>';
       }
     }
   }
@@ -31,7 +31,7 @@
       console.error('Error loading timeline:', err);
       if (timelineContainer) {
         timelineContainer.innerHTML =
-          '<p class="text-stone-500 text-center py-8">大事年表数据暂未加载成功，请稍后刷新页面。</p>';
+          '<p class="text-stone-500 text-center py-8">大型活动数据暂未加载成功，请稍后刷新页面。</p>';
       }
     }
   }
@@ -384,7 +384,7 @@
       { key: 'wechat', label: '现任台长微信', icon: 'chat', value: data.wechat || '', action: 'copy' },
       { key: 'officialAccount', label: '公众号 ID', icon: 'document', value: data.officialAccount || '', action: 'copy' },
       { key: 'videoChannel', label: '视频号昵称', icon: 'video', value: data.videoChannel || '', action: 'copy' },
-      { key: 'bilibili', label: 'B 站账号', icon: 'tv', value: data.bilibili || '', action: 'link' }
+      { key: 'bilibili', label: 'B 站主页', icon: 'tv', value: data.bilibili || '', action: 'link' }
     ];
 
     var html = '';
@@ -424,7 +424,7 @@
           if (action === 'copy' && value) {
             copyToClipboard(value);
           } else if (action === 'link' && value) {
-            window.open('https://space.bilibili.com/' + value, '_blank');
+            window.open('https://space.bilibili.com/' + value);
           }
         });
       })(cards[j]);

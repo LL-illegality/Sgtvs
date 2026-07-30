@@ -42,8 +42,8 @@
     <!-- Tab navigation -->
     <div class="tab-bar">
       <button class="tab-btn" data-tab="settings">通用管理</button>
-      <button class="tab-btn active" data-tab="members">成员管理</button>
-      <button class="tab-btn" data-tab="timeline">大事年表管理</button>
+      <button class="tab-btn active" data-tab="members">“关于我们”管理</button>
+      <button class="tab-btn" data-tab="timeline">“大型活动”管理</button>
     </div>
 
     <!-- Main content -->
@@ -53,7 +53,7 @@
         <div class="panel-header">
           <h2 class="panel-title">通用设置</h2>
           <div class="panel-actions">
-            <button id="btn-save-settings" class="btn btn-save">保存全部</button>
+            <button id="btn-save-settings" class="btn btn-save">保存设置</button>
           </div>
         </div>
         <div id="settings-form" class="settings-form"></div>
@@ -62,27 +62,27 @@
       <!-- Members Tab -->
       <div id="tab-members" class="tab-panel active">
         <div class="panel-header">
-          <h2 class="panel-title">成员列表</h2>
+          <h2 class="panel-title">卡片列表</h2>
           <div class="panel-actions">
-            <button id="btn-add-member" class="btn btn-primary">新增成员</button>
+            <button id="btn-add-member" class="btn btn-primary">新增卡片</button>
             <button id="btn-save-members" class="btn btn-save">保存设置</button>
           </div>
         </div>
         <div id="members-list" class="data-list"></div>
-        <p id="members-empty" class="empty-state hidden">暂无成员数据，点击「新增成员」添加。</p>
+        <p id="members-empty" class="empty-state hidden">暂无数据，点击「新增卡片」添加。</p>
       </div>
 
       <!-- Timeline Tab -->
       <div id="tab-timeline" class="tab-panel">
         <div class="panel-header">
-          <h2 class="panel-title">大事年表</h2>
+          <h2 class="panel-title">大型活动列表</h2>
           <div class="panel-actions">
-            <button id="btn-add-event" class="btn btn-primary">新增事件</button>
+            <button id="btn-add-event" class="btn btn-primary">新增活动</button>
             <button id="btn-save-timeline" class="btn btn-save">保存设置</button>
           </div>
         </div>
         <div id="timeline-list" class="data-list"></div>
-        <p id="timeline-empty" class="empty-state hidden">暂无事件数据，点击「新增事件」添加。</p>
+        <p id="timeline-empty" class="empty-state hidden">暂无数据，点击「新增活动」添加。</p>
       </div>
     </main>
 
