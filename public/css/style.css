@@ -1,0 +1,378 @@
+/* =============================================
+   sgtvs — Custom Styles v3
+   natural-organic design system + timeline-vertical layout
+   Botanical Slowness: all transitions 500-700ms ease-in-out
+   ============================================= */
+
+/* ------------ Keyframes ------------ */
+
+@keyframes floatLeaf {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-18px) rotate(6deg); }
+  50% { transform: translateY(-8px) rotate(-3deg); }
+  75% { transform: translateY(-22px) rotate(9deg); }
+}
+
+@keyframes floatDot {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.35; }
+  20% { transform: translate(24px, -16px) scale(1.1); opacity: 0.5; }
+  40% { transform: translate(12px, -36px) scale(0.9); opacity: 0.3; }
+  60% { transform: translate(-18px, -24px) scale(1.05); opacity: 0.45; }
+  80% { transform: translate(-30px, -8px) scale(0.95); opacity: 0.3; }
+}
+
+@keyframes growVine {
+  0%, 100% { opacity: 0.15; transform: scaleY(0.6); }
+  50% { opacity: 0.5; transform: scaleY(1); }
+}
+
+@keyframes waveMove {
+  0%, 100% { transform: translateX(-3%); opacity: 0.2; }
+  50% { transform: translateX(3%); opacity: 0.45; }
+}
+
+/* Blob morphing (Organic Morphing rule) */
+@keyframes blobMorph {
+  0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+  25% { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
+  50% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
+  75% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
+}
+
+/* ------------ Animation utility classes ------------ */
+.animate-leaf { animation: floatLeaf 7s ease-in-out infinite; }
+.animate-leaf-1 { animation: floatLeaf 6s ease-in-out infinite; animation-delay: -1s; }
+.animate-leaf-2 { animation: floatLeaf 8s ease-in-out infinite; animation-delay: -3s; }
+.animate-dot { animation: floatDot 10s ease-in-out infinite; }
+.animate-dot-1 { animation: floatDot 9s ease-in-out infinite; animation-delay: -2s; }
+.animate-dot-2 { animation: floatDot 11s ease-in-out infinite; animation-delay: -5s; }
+.animate-dot-3 { animation: floatDot 8s ease-in-out infinite; animation-delay: -7s; }
+.animate-vine { animation: growVine 5s ease-in-out infinite; }
+.animate-vine-1 { animation: growVine 4s ease-in-out infinite; animation-delay: -1s; }
+.animate-wave { animation: waveMove 13s ease-in-out infinite; }
+.animate-wave-1 { animation: waveMove 11s ease-in-out infinite; animation-delay: -4s; }
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-leaf, .animate-leaf-1, .animate-leaf-2,
+  .animate-dot, .animate-dot-1, .animate-dot-2, .animate-dot-3,
+  .animate-vine, .animate-vine-1,
+  .animate-wave, .animate-wave-1 {
+    animation: none !important;
+  }
+  [data-scroll] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ---------- Scroll-driven: bidirectional fade (enter + exit) ---------- */
+[data-scroll] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
+}
+[data-scroll].visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-scroll].exit {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+/* ---------- Decorative elements ---------- */
+.leaf { pointer-events: none; z-index: 0; }
+
+.dot-decoration {
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.vine-decoration {
+  pointer-events: none;
+  z-index: 0;
+  position: absolute;
+  border-left: 2px solid #a8a29e;
+  border-bottom: 2px solid #a8a29e;
+  border-radius: 0 0 0 100%;
+  opacity: 0.3;
+  transform-origin: left top;
+}
+
+.wave-decoration {
+  pointer-events: none;
+  z-index: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 60px;
+  opacity: 0.2;
+}
+
+/* Blob decorations (Organic Morphing) */
+.blob {
+  position: absolute;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  animation: blobMorph 12s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+.blob-1 { animation-delay: -2s; }
+.blob-2 { animation-delay: -6s; }
+
+/* Palette swatches */
+.palette-swatch {
+  display: inline-block;
+  transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+}
+.palette-swatch:hover {
+  transform: translateY(-0.125rem) scale(1.1);
+  box-shadow: 0 4px 12px rgba(92, 64, 51, 0.2);
+}
+
+/* Badges (showcase style) */
+.badge {
+  display: inline-block;
+  padding: 0.4rem 1.2rem;
+  background-color: #8b9d77;
+  color: white;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+.badge:hover {
+  background-color: #7a8c68;
+  transform: translateY(-0.125rem);
+}
+
+/* Join card */
+.join-card {
+  background-color: #faf6f1;
+  border-radius: 2rem;
+  border: 1px solid #e7e5e4;
+}
+
+/* ---------- Body gradient background (smooth section transitions) ---------- */
+body {
+  background: linear-gradient(180deg, #faf6f1 0%, #fefce8 50%, #fafaf9 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Section backgrounds — transparent to let body gradient show through */
+.section-brand,
+.section-members,
+.section-timeline,
+.section-join {
+  background-color: transparent;
+}
+
+/* ---------- Timeline layout ---------- */
+
+.timeline-container {
+  position: relative;
+}
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #d6d3d1;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.timeline-node {
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+}
+
+.timeline-center {
+  flex: 0 0 3rem;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: #8b9d77;
+  border: 3px solid #fefce8;
+  z-index: 2;
+  flex-shrink: 0;
+  margin-top: 1.5rem;
+  transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+.timeline-dot:hover {
+  transform: scale(1.3);
+  background-color: #5c4033;
+}
+
+.timeline-side {
+  width: calc(50% - 1.5rem);
+}
+
+/* Timeline card — used for both image+text and text-only sides */
+.timeline-card {
+  background-color: #faf6f1;
+  border-radius: 2rem;
+  border: 1px solid #e7e5e4;
+  padding: 1.5rem;
+  transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+/* Soft Earth Press: hover sinks slightly + deepens color */
+.timeline-card:hover {
+  transform: translateY(0.125rem);
+  background-color: #f5ede4;
+  box-shadow: 0 4px 12px rgba(120, 110, 100, 0.1);
+}
+
+/* Verdant Tint: hover text shifts toward deep green */
+.timeline-card:hover .timeline-title {
+  color: #5c4033;
+}
+
+/* Image inside timeline card */
+.timeline-card-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 1.2rem;
+  margin-bottom: 0.75rem;
+  background-color: #e9e0d4;
+}
+
+/* Detailed text card — slightly different bg for visual distinction */
+.timeline-card-text {
+  background-color: #f5f0ea;
+}
+
+/* Year badge */
+.timeline-year {
+  display: inline-block;
+  padding: 0.2rem 1rem;
+  background-color: #8b9d77;
+  color: white;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.timeline-title {
+  transition: color 0.5s ease-in-out;
+}
+
+/* Timeline responsive (mobile: single side) */
+@media (max-width: 767px) {
+  .timeline-container::before {
+    left: 1rem;
+    transform: none;
+  }
+  .timeline-node {
+    padding-left: 2.5rem;
+  }
+  .timeline-center {
+    position: absolute;
+    left: 0;
+    top: 0;
+    flex: none;
+    width: 2rem;
+  }
+  .timeline-dot {
+    width: 0.875rem;
+    height: 0.875rem;
+    margin-top: 1.75rem;
+  }
+  .timeline-side {
+    width: 100%;
+  }
+}
+
+/* ---------- Member card (image + text) ---------- */
+.member-card {
+  background-color: #faf6f1;
+  border-radius: 2rem;
+  border: 1px solid #e7e5e4;
+  overflow: hidden;
+  transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out, background-color 0.5s ease-in-out;
+}
+/* Soft Earth Press */
+.member-card:hover {
+  transform: translateY(0.125rem);
+  background-color: #f5ede4;
+  box-shadow: 0 4px 16px rgba(120, 110, 100, 0.1);
+}
+/* Verdant Tint */
+.member-card:hover .member-name {
+  color: #5c4033;
+}
+
+.member-card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background-color: #e9e0d4;
+}
+
+.member-card-body {
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.member-name {
+  transition: color 0.5s ease-in-out;
+}
+
+.member-role {
+  color: #8b9d77;
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.member-desc {
+  color: #78716c;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* ---------- Join section ---------- */
+.join-cta {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  background-color: #8b9d77;
+  color: white;
+  transition: background-color 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+.join-cta:hover {
+  background-color: #7a8c68;
+  transform: translateY(0.125rem);
+}
+.join-cta:active {
+  transform: scale(0.97);
+}
+
+/* ---------- Smooth scroll ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ---------- Body width control ---------- */
+.content-width {
+  max-width: 68ch;
+}

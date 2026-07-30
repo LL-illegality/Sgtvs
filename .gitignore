@@ -137,6 +137,14 @@ dist
 !.yarn/sdks
 !.yarn/versions
 
+# Uploaded files (auto-created by server)
+public/uploads/
+
+# Develop file
+AGENTS.md
+plan.md
+UiDesign/
+
 # Vite files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*

@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "title": "校园新闻奖",
+    "subtitle": "市级一等奖",
+    "image": "/logo.png",
+    "description": "2024年荣获全市校园新闻评选一等奖，多期节目获专家好评，成为全市校园媒体标杆。",
+    "order": 0
+  },
+  {
+    "id": 2,
+    "title": "全国校园影视大赛",
+    "subtitle": "银奖作品",
+    "image": "/logo.png",
+    "description": "原创短视频作品《青春光影》在全国校园影视大赛中斩获银奖，展现学生创作实力。",
+    "order": 1
+  },
+  {
+    "id": 3,
+    "title": "校园晚会首次直播",
+    "subtitle": "在线观看突破五千",
+    "image": "/logo.png",
+    "description": "成功完成校园元旦晚会首次网络直播，多机位切换与实时字幕技术获得师生一致好评。",
+    "order": 2
+  },
+  {
+    "id": 4,
+    "title": "高清摄录设备升级",
+    "subtitle": "制作能力全面提升",
+    "image": "/logo.png",
+    "description": "完成高清摄录设备换代，搭建非线性编辑系统，新增航拍无人机与稳定器等设备。",
+    "order": 3
+  },
+  {
+    "id": 7,
+    "image": "1",
+    "description": "",
+    "order": 4
+  },
+  {
+    "id": 5,
+    "title": "新媒体中心成立",
+    "subtitle": "拓展短视频与直播业务",
+    "image": "/logo.png",
+    "description": "整合资源成立新媒体中心，成员规模扩大至三十人，日均产出内容覆盖全校师生。",
+    "order": 5
+  },
+  {
+    "id": 6,
+    "title": "优秀校园电视台",
+    "subtitle": "市级荣誉称号",
+    "image": "/logo.png",
+    "description": "在全市校园电视台评选中荣获「优秀校园电视台」称号，节目质量获专业认可。",
+    "order": 6
+  }
+]

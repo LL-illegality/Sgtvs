@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>后台管理 — 深圳实验学校光明部电视台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+  <!-- Auth modal -->
+  <div id="auth-overlay" class="auth-overlay">
+    <div id="auth-modal" class="auth-modal">
+      <div class="auth-modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#5c4033" stroke-width="1.5" width="28" height="28"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      </div>
+      <h2 class="auth-modal-title">请输入管理口令</h2>
+      <p class="auth-modal-desc">验证通过后即可进入后台管理</p>
+      <input id="auth-password" class="auth-input" type="password" placeholder="输入口令" autocomplete="off">
+      <p id="auth-error" class="auth-error hidden">口令错误，请重试</p>
+      <button id="auth-submit" class="auth-btn">确认</button>
+    </div>
+  </div>
+
+  <!-- Main content (initially hidden) -->
+  <div id="admin-main-content" style="display:none;">
+    <!-- Decorative blobs -->
+    <div class="deco-blob deco-blob-1"></div>
+    <div class="deco-blob deco-blob-2"></div>
+    <div class="deco-dot deco-dot-1"></div>
+    <div class="deco-dot deco-dot-2"></div>
+    <div class="deco-dot deco-dot-3"></div>
+
+    <!-- Navigation bar -->
+    <header class="admin-header">
+      <div class="header-inner">
+        <h1 class="header-title">后台管理</h1>
+        <span class="header-subtitle">深圳实验学校光明部电视台</span>
+      </div>
+    </header>
+
+    <!-- Tab navigation -->
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="members">成员管理</button>
+      <button class="tab-btn" data-tab="timeline">大事年表管理</button>
+    </div>
+
+    <!-- Main content -->
+    <main class="main-content">
+      <!-- Members Tab -->
+      <div id="tab-members" class="tab-panel active">
+        <div class="panel-header">
+          <h2 class="panel-title">成员列表</h2>
+          <div class="panel-actions">
+            <button id="btn-add-member" class="btn btn-primary">新增成员</button>
+            <button id="btn-save-members" class="btn btn-save">保存设置</button>
+          </div>
+        </div>
+        <div id="members-list" class="data-list"></div>
+        <p id="members-empty" class="empty-state hidden">暂无成员数据，点击「新增成员」添加。</p>
+      </div>
+
+      <!-- Timeline Tab -->
+      <div id="tab-timeline" class="tab-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">大事年表</h2>
+          <div class="panel-actions">
+            <button id="btn-add-event" class="btn btn-primary">新增事件</button>
+            <button id="btn-save-timeline" class="btn btn-save">保存设置</button>
+          </div>
+        </div>
+        <div id="timeline-list" class="data-list"></div>
+        <p id="timeline-empty" class="empty-state hidden">暂无事件数据，点击「新增事件」添加。</p>
+      </div>
+    </main>
+
+    <!-- Modal overlay -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 id="modal-title" class="modal-title">表单</h3>
+          <button id="modal-close" class="modal-close-btn">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </button>
+        </div>
+        <form id="modal-form" class="modal-form">
+          <!-- Dynamic fields rendered by JS -->
+          <div id="form-fields"></div>
+          <div class="form-actions">
+            <button type="button" id="btn-cancel" class="btn btn-secondary">取消</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="/admin/js/admin.js"></script>
+</body>
+</html>
