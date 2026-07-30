@@ -41,12 +41,24 @@
 
     <!-- Tab navigation -->
     <div class="tab-bar">
+      <button class="tab-btn" data-tab="settings">通用管理</button>
       <button class="tab-btn active" data-tab="members">成员管理</button>
       <button class="tab-btn" data-tab="timeline">大事年表管理</button>
     </div>
 
     <!-- Main content -->
     <main class="main-content">
+      <!-- Settings Tab -->
+      <div id="tab-settings" class="tab-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">通用设置</h2>
+          <div class="panel-actions">
+            <button id="btn-save-settings" class="btn btn-save">保存全部</button>
+          </div>
+        </div>
+        <div id="settings-form" class="settings-form"></div>
+      </div>
+
       <!-- Members Tab -->
       <div id="tab-members" class="tab-panel active">
         <div class="panel-header">

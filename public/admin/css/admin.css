@@ -682,6 +682,68 @@ body {
   to { opacity: 0; transform: scale(0.8); }
 }
 
+/* ---------- Form Select ---------- */
+.form-select {
+  width: 100%;
+  padding: 8px 16px;
+  border: 1px solid #e7e5e4;
+  border-radius: 9999px;
+  font-size: 14px;
+  color: #1f2937;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239ca3af' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+.form-select:focus {
+  border-color: #d4c9bb;
+  box-shadow: 0 0 0 3px rgba(215, 200, 185, 0.2);
+}
+
+/* ---------- Checkbox label ---------- */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #5c4033;
+  cursor: pointer;
+  padding: 4px 0;
+}
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #8b9d77;
+  cursor: pointer;
+}
+
+/* ---------- Dynamic action value container ---------- */
+.dynamic-action-value {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, margin 0.3s ease-in-out;
+  margin-top: 0;
+}
+.dynamic-action-value.visible {
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 14px;
+}
+
+/* ---------- Item extra info line ---------- */
+.item-extra {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
 /* ---------- Reduced Motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *,

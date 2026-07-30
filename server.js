@@ -44,6 +44,7 @@ function writeJSON(filePath, data) {
 
 const membersPath = path.join(__dirname, 'public', 'api', 'members.json');
 const timelinePath = path.join(__dirname, 'public', 'api', 'timeline.json');
+const settingsPath = path.join(__dirname, 'public', 'api', 'settings.json');
 
 // ---------------------------------------------------------------------------
 // Members CRUD
@@ -127,8 +128,30 @@ app.get('/api/timeline', function (_req, res) {
 });
 
 // ---------------------------------------------------------------------------
-// (Old per-item CRUD routes removed in v2; batch save used instead)
+// Settings
 // ---------------------------------------------------------------------------
+
+// GET /api/settings — return settings
+app.get('/api/settings', function (_req, res) {
+  try {
+    var settings = readJSON(settingsPath);
+    res.json(settings);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to read settings data' });
+  }
+});
+
+// PUT /api/settings/save — save settings
+app.put('/api/settings/save', function (req, res) {
+  try {
+    var settings = req.body;
+    writeJSON(settingsPath, settings);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to save settings' });
+  }
+});
+
 // ---------------------------------------------------------------------------
 // Admin page
 // ---------------------------------------------------------------------------

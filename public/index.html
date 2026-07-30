@@ -25,6 +25,9 @@
       <p class="font-sans text-stone-500 text-sm md:text-base mt-4 tracking-wider">
         记录校园点滴 · 传播青春声音
       </p>
+      <div class="mt-8" data-scroll>
+        <a href="#join-us" class="brand-cta">加入我们</a>
+      </div>
     </div>
 
     <!-- Floating leaves decorations -->
@@ -63,7 +66,7 @@
         <span class="palette-swatch w-8 h-8 rounded-full" style="background-color:#faf6f1" title="Warm Cream"></span>
       </div>
 
-      <div id="members-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <div id="members-grid" class="members-grid">
       </div>
     </div>
 
@@ -99,13 +102,38 @@
        Layer 4 — JoinUs (min-height: 100vh)
        ============================================================ -->
   <section id="join-us" class="section-join min-h-screen relative overflow-hidden px-6 py-16 md:py-20 flex items-center">
-    <div class="max-w-3xl mx-auto text-center relative z-10">
+    <!-- Decorative blobs -->
+    <div class="blob absolute top-[5%] right-[-10%] w-[35vw] h-[35vw] max-w-[400px] max-h-[400px] bg-[#e9e0d4]/30" data-parallax="0.02"></div>
+    <div class="blob blob-2 absolute bottom-[-5%] left-[-8%] w-[30vw] h-[30vw] max-w-[350px] max-h-[350px] bg-[#8b9d77]/10" data-parallax="-0.03"></div>
+
+    <!-- Floating leaves -->
+    <svg class="leaf animate-leaf absolute top-[12%] left-[5%] w-8 md:w-12 opacity-25" viewBox="0 0 50 50" data-parallax="0.03">
+      <path d="M25 4 C38 12 44 30 25 46 C6 30 12 12 25 4Z" fill="#8b9d77" />
+    </svg>
+    <svg class="leaf animate-leaf-2 absolute top-[25%] right-[6%] w-6 md:w-10 opacity-20" viewBox="0 0 50 50" data-parallax="-0.02">
+      <path d="M25 2 C32 10 38 28 25 48 C12 28 18 10 25 2Z" fill="#d4a373" />
+    </svg>
+    <svg class="leaf animate-leaf-1 absolute bottom-[20%] left-[10%] w-7 md:w-11 opacity-20" viewBox="0 0 50 50" data-parallax="0.04">
+      <path d="M25 6 C40 14 46 32 25 44 C4 32 10 14 25 6Z" fill="#78716c" />
+    </svg>
+
+    <!-- Floating dots -->
+    <div class="dot-decoration animate-dot-2 w-16 h-16 md:w-20 md:h-20 bg-[#8b9d77]/15 top-[15%] left-[12%]" data-parallax="0.03"></div>
+    <div class="dot-decoration animate-dot-3 w-10 h-10 md:w-14 md:h-14 bg-[#d4a373]/20 bottom-[30%] right-[10%]" data-parallax="-0.02"></div>
+
+    <!-- Vine decoration -->
+    <div class="vine-decoration animate-vine w-20 h-28 md:w-28 md:h-36 bottom-[5%] right-[2%]" data-parallax="0.02" style="transform: scaleX(-1);"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10">
       <h2 class="font-serif text-3xl md:text-4xl text-[#5c4033] mb-4" data-scroll>
         加入我们
       </h2>
       <p class="font-sans text-stone-500 text-sm md:text-base mb-8" data-scroll>
         用镜头记录青春，用画面讲述故事
       </p>
+
+      <!-- Contact cards (rendered by JS) -->
+      <div id="contact-cards" class="contact-cards-grid" data-scroll></div>
 
       <!-- Department badges (showcase style) -->
       <div class="flex flex-wrap justify-center gap-3 mb-8" data-scroll>
@@ -129,6 +157,9 @@
         </a>
       </div>
     </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">已复制</div>
 
     <!-- Wave decorations -->
     <div class="wave-decoration animate-wave" aria-hidden="true">

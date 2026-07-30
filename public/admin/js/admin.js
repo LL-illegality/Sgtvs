@@ -61,6 +61,7 @@
 
   var membersData = [];      // local data (unsaved)
   var timelineData = [];     // local data (unsaved)
+  var settingsData = {};
   var membersChanged = false;
   var timelineChanged = false;
 
@@ -71,8 +72,10 @@
   // DOM references
   // -----------------------------------------------------------------------
   var tabBtns = document.querySelectorAll('.tab-btn');
+  var tabSettings = document.getElementById('tab-settings');
   var tabMembers = document.getElementById('tab-members');
   var tabTimeline = document.getElementById('tab-timeline');
+  var settingsForm = document.getElementById('settings-form');
   var membersList = document.getElementById('members-list');
   var timelineList = document.getElementById('timeline-list');
   var membersEmpty = document.getElementById('members-empty');
@@ -81,6 +84,7 @@
   var btnAddEvent = document.getElementById('btn-add-event');
   var btnSaveMembers = document.getElementById('btn-save-members');
   var btnSaveTimeline = document.getElementById('btn-save-timeline');
+  var btnSaveSettings = document.getElementById('btn-save-settings');
 
   var modalOverlay = document.getElementById('modal-overlay');
   var modalTitle = document.getElementById('modal-title');
@@ -98,6 +102,7 @@
       var isActive = btn.getAttribute('data-tab') === tab;
       btn.classList.toggle('active', isActive);
     });
+    if (tabSettings) tabSettings.classList.toggle('active', tab === 'settings');
     tabMembers.classList.toggle('active', tab === 'members');
     tabTimeline.classList.toggle('active', tab === 'timeline');
   }
@@ -256,12 +261,26 @@
       subtitle.className = 'item-subtitle';
       subtitle.textContent = member.subtitle;
 
+      // Extra info line
+      var extra = document.createElement('div');
+      extra.className = 'item-extra';
+      var extraParts = [];
+      if (member.showDescription === false) {
+        extraParts.push('简介已隐藏');
+      }
+      var clickLabels = { 'detail': '点击查看详情', 'scroll': '滚动至 section', 'link': '跳转链接' };
+      if (member.clickAction && member.clickAction !== 'none' && clickLabels[member.clickAction]) {
+        extraParts.push(clickLabels[member.clickAction]);
+      }
+      extra.textContent = extraParts.join(' \u00B7 ');
+
       var desc = document.createElement('div');
       desc.className = 'item-desc';
       desc.textContent = member.description || '';
 
       content.appendChild(title);
       content.appendChild(subtitle);
+      content.appendChild(extra);
       content.appendChild(desc);
 
       // Actions
@@ -322,6 +341,9 @@
       subtitle: data.subtitle || '',
       image: data.image || '',
       description: data.description || '',
+      showDescription: data.showDescription !== false,
+      clickAction: data.clickAction || 'none',
+      clickActionValue: data.clickActionValue || '',
       order: membersData.length,
       _isNew: true
     };
@@ -344,6 +366,9 @@
     member.subtitle = data.subtitle || '';
     member.image = data.image || '';
     member.description = data.description || '';
+    member.showDescription = data.showDescription !== false;
+    member.clickAction = data.clickAction || 'none';
+    member.clickActionValue = data.clickActionValue || '';
     membersChanged = true;
     renderMembers(membersData);
     updateSaveButtons();
@@ -398,6 +423,9 @@
         subtitle: m.subtitle,
         image: m.image,
         description: m.description,
+        showDescription: m.showDescription !== false,
+        clickAction: m.clickAction || 'none',
+        clickActionValue: m.clickActionValue || '',
         order: m.order
       };
     });
@@ -590,6 +618,58 @@
   }
 
   // -----------------------------------------------------------------------
+  // Settings
+  // -----------------------------------------------------------------------
+  function loadSettings() {
+    return api('GET', '/api/settings').then(function (data) {
+      settingsData = data;
+      renderSettings(settingsData);
+      return data;
+    });
+  }
+
+  function renderSettings(data) {
+    if (!settingsForm) return;
+    var fields = [
+      { key: 'wechat', label: '现任台长微信', placeholder: '微信号' },
+      { key: 'officialAccount', label: '公众号 ID', placeholder: '公众号 ID' },
+      { key: 'videoChannel', label: '视频号昵称', placeholder: '视频号昵称' },
+      { key: 'bilibili', label: 'B 站账号', placeholder: 'B 站 UID 或空间链接' }
+    ];
+    var html = '';
+    for (var i = 0; i < fields.length; i++) {
+      var f = fields[i];
+      var val = data[f.key] || '';
+      html +=
+        '<div class="form-group settings-field">' +
+          '<label class="form-label" for="field-' + f.key + '">' + f.label + '</label>' +
+          '<input class="form-input" id="field-' + f.key + '" type="text" placeholder="' + f.placeholder + '" value="' + escapeHtml(val) + '">' +
+        '</div>';
+    }
+    settingsForm.innerHTML = html;
+  }
+
+  function saveSettings() {
+    if (!settingsForm) return;
+    var inputs = settingsForm.querySelectorAll('.settings-field .form-input');
+    var data = {};
+    inputs.forEach(function (input) {
+      var key = input.id.replace('field-', '');
+      data[key] = input.value;
+    });
+    api('PUT', '/api/settings/save', data).then(function () {
+      alert('保存成功');
+      return loadSettings();
+    }).catch(function (err) {
+      alert('保存失败：' + err.message);
+    });
+  }
+
+  if (btnSaveSettings) {
+    btnSaveSettings.addEventListener('click', saveSettings);
+  }
+
+  // -----------------------------------------------------------------------
   // Modal forms
   // -----------------------------------------------------------------------
   function openMemberForm(member) {
@@ -600,6 +680,40 @@
     } else {
       editingId = null;
       modalTitle.textContent = '新增成员';
+    }
+
+    var showDesc = member ? member.showDescription : true;
+    var clickAction = member ? (member.clickAction || 'none') : 'none';
+    var clickValue = member ? (member.clickActionValue || '') : '';
+
+    var actionValueHtml = '';
+    if (clickAction !== 'none') {
+      var labelMap = { 'detail': '详情文本', 'scroll': '目标 Section 选择器', 'link': '跳转链接' };
+      var placeholderMap = { 'detail': '', 'scroll': '#section-id', 'link': 'https://...' };
+      var isTextarea = clickAction === 'detail';
+      var inputHtml = isTextarea
+        ? '<textarea class="form-textarea" id="field-clickActionValue">' + escapeHtml(clickValue) + '</textarea>'
+        : '<input class="form-input" id="field-clickActionValue" type="text" placeholder="' + placeholderMap[clickAction] + '" value="' + escapeHtml(clickValue) + '">';
+      actionValueHtml =
+        '<div class="form-group dynamic-action-value visible" id="action-value-group">' +
+          '<label class="form-label" for="field-clickActionValue">' + labelMap[clickAction] + '</label>' +
+          inputHtml +
+        '</div>';
+    } else {
+      actionValueHtml = '<div class="form-group dynamic-action-value" id="action-value-group"></div>';
+    }
+
+    var clickActionOptions = [
+      { value: 'none', label: '无行为' },
+      { value: 'detail', label: '展示详情文本' },
+      { value: 'scroll', label: '滚动到某个section' },
+      { value: 'link', label: '跳转链接' }
+    ];
+    var optionsHtml = '';
+    for (var oi = 0; oi < clickActionOptions.length; oi++) {
+      var opt = clickActionOptions[oi];
+      var selected = opt.value === clickAction ? ' selected' : '';
+      optionsHtml += '<option value="' + opt.value + '"' + selected + '>' + opt.label + '</option>';
     }
 
     formFields.innerHTML =
@@ -624,12 +738,60 @@
       '<div class="form-group">' +
         '<label class="form-label" for="field-description">简介</label>' +
         '<textarea class="form-textarea" id="field-description">' + escapeHtml(member ? member.description : '') + '</textarea>' +
-      '</div>';
+      '</div>' +
+      '<div class="form-group">' +
+        '<label class="checkbox-label">' +
+          '<input type="checkbox" id="field-showDescription"' + (showDesc ? ' checked' : '') + '>' +
+          '展示简介' +
+        '</label>' +
+      '</div>' +
+      '<div class="form-group">' +
+        '<label class="form-label" for="field-clickAction">点击行为</label>' +
+        '<select class="form-select" id="field-clickAction">' + optionsHtml + '</select>' +
+      '</div>' +
+      actionValueHtml;
+
+    // Set up click action change listener
+    var clickActionSelect = document.getElementById('field-clickAction');
+    if (clickActionSelect) {
+      clickActionSelect.addEventListener('change', function () {
+        updateActionValueGroup();
+      });
+    }
 
     // Set up file upload listener
     setupFileUpload();
 
     modalOverlay.classList.remove('hidden');
+  }
+
+  function updateActionValueGroup() {
+    var select = document.getElementById('field-clickAction');
+    var container = document.getElementById('action-value-group');
+    if (!select || !container) return;
+    var val = select.value;
+    if (val === 'none') {
+      container.classList.remove('visible');
+      setTimeout(function () {
+        container.innerHTML = '';
+      }, 300);
+    } else {
+      var labelMap = { 'detail': '详情文本', 'scroll': '目标 Section 选择器', 'link': '跳转链接' };
+      var placeholderMap = { 'detail': '', 'scroll': '#section-id', 'link': 'https://...' };
+      var isTextarea = val === 'detail';
+      var currentValue = '';
+      var existingInput = container.querySelector('#field-clickActionValue');
+      if (existingInput) {
+        currentValue = existingInput.value;
+      }
+      var inputHtml = isTextarea
+        ? '<textarea class="form-textarea" id="field-clickActionValue">' + escapeHtml(currentValue) + '</textarea>'
+        : '<input class="form-input" id="field-clickActionValue" type="text" placeholder="' + placeholderMap[val] + '" value="' + escapeHtml(currentValue) + '">';
+      container.innerHTML =
+        '<label class="form-label" for="field-clickActionValue">' + labelMap[val] + '</label>' +
+        inputHtml;
+      container.classList.add('visible');
+    }
   }
 
   function openTimelineForm(event) {
@@ -724,7 +886,7 @@
   // -----------------------------------------------------------------------
   function getFormData() {
     var data = {};
-    var inputs = formFields.querySelectorAll('input, textarea');
+    var inputs = formFields.querySelectorAll('input, textarea, select');
     inputs.forEach(function (input) {
       if (input.type === 'file') return;
       if (input.type === 'radio') {
@@ -733,7 +895,12 @@
         }
         return;
       }
-      data[input.id.replace('field-', '')] = input.value;
+      if (input.type === 'checkbox') {
+        data[input.id.replace('field-', '')] = input.checked;
+        return;
+      }
+      var key = input.id.replace('field-', '');
+      data[key] = input.value;
     });
     return data;
   }
@@ -747,7 +914,10 @@
         title: data.title || '',
         subtitle: data.subtitle || '',
         image: data.image || '',
-        description: data.description || ''
+        description: data.description || '',
+        showDescription: data.showDescription !== false,
+        clickAction: data.clickAction || 'none',
+        clickActionValue: data.clickActionValue || ''
       };
 
       if (editingId !== null) {
@@ -813,6 +983,7 @@
   function initAdmin() {
     loadMembers();
     loadTimeline();
+    loadSettings();
   }
 
   window.initAdmin = initAdmin;
