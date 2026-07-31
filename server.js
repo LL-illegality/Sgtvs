@@ -42,9 +42,25 @@ function writeJSON(filePath, data) {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
 }
 
+// Seed a runtime data file from defaults/ if it does not exist yet.
+// Runtime data (public/api/*.json) is customer-edited and git-ignored,
+// so deployments never overwrite live configuration.
+function seedIfMissing(runtimePath, defaultsPath) {
+  if (!fs.existsSync(runtimePath)) {
+    fs.copyFileSync(defaultsPath, runtimePath);
+    console.log('Seeded ' + path.basename(runtimePath) + ' from defaults');
+  }
+}
+
 const membersPath = path.join(__dirname, 'public', 'api', 'members.json');
 const timelinePath = path.join(__dirname, 'public', 'api', 'timeline.json');
 const settingsPath = path.join(__dirname, 'public', 'api', 'settings.json');
+
+// Ensure runtime data directory exists, then seed from defaults on startup
+fs.mkdirSync(path.dirname(membersPath), { recursive: true });
+seedIfMissing(membersPath, path.join(__dirname, 'defaults', 'members.json'));
+seedIfMissing(timelinePath, path.join(__dirname, 'defaults', 'timeline.json'));
+seedIfMissing(settingsPath, path.join(__dirname, 'defaults', 'settings.json'));
 
 // ---------------------------------------------------------------------------
 // Members CRUD

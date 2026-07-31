@@ -128,7 +128,6 @@
         card.style.height = rowMax + 'px';
         card.style.transform = 'scale(' + scale + ')';
         wrapper.style.height = (rowMax * scale) + 'px';
-        wrapper.classList.toggle('justify-self-center', scale >= 1);
       }
     }
   }

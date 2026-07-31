@@ -140,6 +140,9 @@ dist
 # Uploaded files (auto-created by server)
 public/uploads/
 
+# Runtime data (customer-edited, seeded from defaults/ on first start)
+public/api/*.json
+
 # Develop file
 AGENTS.md
 plan.md

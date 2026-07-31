@@ -150,6 +150,7 @@
 /* Palette swatches */
 .palette-swatch {
   display: inline-block;
+  border: 1px solid #e7e5e4;
   transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
 }
 .palette-swatch:hover {
@@ -311,14 +312,22 @@ body {
 
 /* ---------- Members grid ---------- */
 .members-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* 行级居中：2 卡 / 1 卡的最后一行居中，3 卡行恰好填满无效果 */
   gap: 16px;
 }
 
 .member-card-wrapper {
+  flex: 0 0 calc((100% - 32px) / 3);  /* 与 JS cellWidth = (W - 32) / 3 公式一致 */
+  display: flex;
+  justify-content: center;   /* 卡片在 wrapper 内居中（替代原 justify-self-center 的轨道内居中） */
   overflow: hidden;
   border-radius: 2rem;
+}
+
+.member-card-wrapper .member-card {
+  flex-shrink: 0;            /* 防止 scale<1 时卡片（280px）被压缩到 cellWidth */
 }
 
 /* ---------- Member card (image + text) ---------- */

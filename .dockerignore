@@ -1,0 +1,18 @@
+# Runtime data — never bake customer/local data into the image
+public/api/*.json
+public/uploads/
+
+# VCS
+.git
+.gitignore
+
+# Docs / dev files
+plan.md
+AGENTS.md
+deploy.md
+README.md
+LICENSE
+UiDesign/
+
+# Dependencies (installed inside the image)
+node_modules

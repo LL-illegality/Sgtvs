@@ -25,8 +25,10 @@ npm start
 ## Docker 部署
 
 ```bash
+docker stop sgtvs
+docker rm sgtvs
 docker build -t sgtvs .
-docker run -d -p 3000:3000 --name sgtvs --restart unless-stopped sgtvs
+docker run -d -p 3001:3000 --name sgtvs --restart unless-stopped sgtvs
 ```
 
 详细部署流程请参阅 [`deploy.md`](./deploy.md)。

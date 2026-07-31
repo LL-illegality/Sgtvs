@@ -1,0 +1,14 @@
+services:
+  sgtvs:
+    build: .
+    container_name: sgtvs
+    ports:
+      - "3001:3000"
+    volumes:
+      - sgtvs_api:/app/public/api
+      - sgtvs_uploads:/app/public/uploads
+    restart: unless-stopped
+
+volumes:
+  sgtvs_api:
+  sgtvs_uploads:
