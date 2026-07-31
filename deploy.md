@@ -58,6 +58,24 @@ docker compose up -d
 
 若使用 `docker run` 直接部署，需手动加 `-v sgtvs_api:/app/public/api -v sgtvs_uploads:/app/public/uploads`。
 
+### 3.1 备份配置与图片（建议定期执行）
+
+```bash
+# 在项目目录下执行，将两个卷的内容备份到 backup/ 目录
+mkdir -p backup
+docker run --rm -v sgtvs_api:/data -v "$PWD/backup":/backup alpine sh -c "cp -r /data /backup/api"
+docker run --rm -v sgtvs_uploads:/data -v "$PWD/backup":/backup alpine sh -c "cp -r /data /backup/uploads"
+```
+
+恢复备份：
+
+```bash
+docker run --rm -v sgtvs_api:/data -v "$PWD/backup":/backup alpine sh -c "cp -r /backup/api/* /data/"
+docker run --rm -v sgtvs_uploads:/data -v "$PWD/backup":/backup alpine sh -c "cp -r /backup/uploads/* /data/"
+```
+
+> 注意：配置修改后请务必执行备份。删除容器前（`docker compose down`）建议先备份，以防数据丢失。
+
 ## 4. 自定义端口
 
 ```bash

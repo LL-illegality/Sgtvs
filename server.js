@@ -9,8 +9,20 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
+// API responses must never be cached (config changes are frequent)
+app.use('/api', function (_req, res, next) {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
 // Serve static files from public/ directory
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: function (res, filePath) {
+    if (filePath.endsWith('.html')) {
+      res.set('Cache-Control', 'no-store');
+    }
+  }
+}));
 
 // Serve logo.png and other root-level assets
 app.use(express.static(__dirname));
@@ -38,8 +50,19 @@ function readJSON(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
+function readJSONSafe(filePath) {
+  try {
+    var data = readJSON(filePath);
+    return Array.isArray(data) ? data : [];
+  } catch (e) {
+    return [];
+  }
+}
+
 function writeJSON(filePath, data) {
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+  var tmpPath = filePath + '.tmp';
+  fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), 'utf8');
+  fs.renameSync(tmpPath, filePath);
 }
 
 // Seed a runtime data file from defaults/ if it does not exist yet.
@@ -89,7 +112,7 @@ app.put('/api/members/save', function (req, res) {
     var members = req.body;
     members.forEach(function (m, i) { m.order = i; });
     writeJSON(membersPath, members);
-    cleanupUnusedImages(members);
+    cleanupUnusedImages();
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to save members' });
@@ -103,20 +126,24 @@ app.put('/api/timeline/save', function (req, res) {
     events.sort(function (a, b) { return b.date.localeCompare(a.date); });
     events.forEach(function (e, i) { e.order = i; });
     writeJSON(timelinePath, events);
-    cleanupUnusedImages(events);
+    cleanupUnusedImages();
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to save timeline' });
   }
 });
 
-// cleanupUnusedImages — delete images from uploads/ not referenced by any item
-function cleanupUnusedImages(allItems) {
+// cleanupUnusedImages — delete images from uploads/ not referenced by ANY item
+// in members.json or timeline.json. Collects references from both data files so
+// saving one type never deletes images owned by the other type.
+function cleanupUnusedImages() {
   var usedUrls = {};
-  allItems.forEach(function (item) {
-    if (item.image && item.image.startsWith('/uploads/')) {
-      usedUrls[item.image] = true;
-    }
+  [readJSONSafe(membersPath), readJSONSafe(timelinePath)].forEach(function (allItems) {
+    allItems.forEach(function (item) {
+      if (item.image && item.image.startsWith('/uploads/')) {
+        usedUrls[item.image] = true;
+      }
+    });
   });
   var uploadsPath = path.join(__dirname, 'public', 'uploads');
   if (!fs.existsSync(uploadsPath)) return;
@@ -172,6 +199,7 @@ app.put('/api/settings/save', function (req, res) {
 // Admin page
 // ---------------------------------------------------------------------------
 app.get('/admin', function (_req, res) {
+  res.set('Cache-Control', 'no-store');
   res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'));
 });
 
@@ -179,6 +207,7 @@ app.get('/admin', function (_req, res) {
 // Fallback: serve index.html for all other routes (SPA-like)
 // ---------------------------------------------------------------------------
 app.get('*', function (_req, res) {
+  res.set('Cache-Control', 'no-store');
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
