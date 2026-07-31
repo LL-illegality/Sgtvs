@@ -94,8 +94,22 @@
       membersGrid.appendChild(wrapper);
     });
 
-    scaleMembersGrid();
-    setTimeout(handleScrollEffects, 100);
+    // 等所有图片加载完成后再测量行高：未加载的 <img> 高度为 0，
+    // 若提前测量会把 rowMax 算成"仅文字"高度，导致图片区被压缩为 0
+    var pending = [];
+    membersGrid.querySelectorAll('.member-card-img').forEach(function (img) {
+      if (!img.complete) {
+        pending.push(new Promise(function (resolve) {
+          img.addEventListener('load', resolve);
+          img.addEventListener('error', resolve);
+        }));
+      }
+    });
+
+    Promise.all(pending).then(function () {
+      scaleMembersGrid();
+      setTimeout(handleScrollEffects, 100);
+    });
   }
 
   /* ---------- Scale members to fit proportionally ---------- */
@@ -118,6 +132,7 @@
         if (card) {
           card.style.height = '';
           card.style.transform = 'none';
+          wrapper.style.height = '';   // 清除上一轮高度，避免 flex stretch 影响本轮测量（否则会逐次缩放累积，无法恢复）
           rowMax = Math.max(rowMax, card.offsetHeight);
         }
       }
@@ -517,6 +532,11 @@
       resizeTimer = requestAnimationFrame(function () {
         scaleMembersGrid();
       });
+    });
+
+    // 安全网：所有资源（含图片）加载完毕后重新测量一次行高
+    window.addEventListener('load', function () {
+      scaleMembersGrid();
     });
   }
 

@@ -322,6 +322,7 @@ body {
   flex: 0 0 calc((100% - 32px) / 3);  /* 与 JS cellWidth = (W - 32) / 3 公式一致 */
   display: flex;
   justify-content: center;   /* 卡片在 wrapper 内居中（替代原 justify-self-center 的轨道内居中） */
+  align-items: flex-start;   /* 防止 align-items: stretch 将卡片拉伸到上一轮的 wrapper 高度，污染高度测量 */
   overflow: hidden;
   border-radius: 2rem;
 }
@@ -333,7 +334,9 @@ body {
 /* ---------- Member card (image + text) ---------- */
 .member-card {
   width: 280px;
-  transform-origin: top left;
+  /* 以 top center 为缩放原点：卡片居中于 wrapper 时，缩放后可视宽度恰为 280*scale = 单元宽，
+     不会被 overflow: hidden 裁掉左侧，且宽高比 280:rowMax 在任意缩放比例下保持不变 */
+  transform-origin: top center;
   display: flex;
   flex-direction: column;
   background-color: #faf6f1;
